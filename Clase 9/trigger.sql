@@ -1,93 +1,151 @@
- create table empleados(
-  documento char(8) not null,
-  nombre varchar(30) not null,
-  domicilio varchar(30),
-  seccion varchar(20),
-  constraint PK_empleados primary key(documento),
- );
+CREATE TABLE empleados 
+  ( 
+     documento CHAR(8) NOT NULL, 
+     nombre    VARCHAR(30) NOT NULL, 
+     domicilio VARCHAR(30), 
+     seccion   VARCHAR(20), 
+     CONSTRAINT pk_empleados PRIMARY KEY(documento), 
+  ); 
 
- insert into empleados values('22222222','Ana Acosta','Bulnes 56','Secretaria');
- insert into empleados values('23333333','Bernardo Bustos','Bulnes 188','Contaduria');
- insert into empleados values('24444444','Carlos Caseres','Caseros 364','Sistemas');
- insert into empleados values('25555555','Diana Duarte','Colon 1234','Sistemas');
- insert into empleados values('26666666','Diana Duarte','Colon 897','Sistemas');
- insert into empleados values('27777777','Matilda Morales','Colon 542','Gerencia');
+INSERT INTO empleados 
+VALUES     ('22222222', 
+            'Ana Acosta', 
+            'Bulnes 56', 
+            'Secretaria'); 
 
- GO;
+INSERT INTO empleados 
+VALUES     ('23333333', 
+            'Bernardo Bustos', 
+            'Bulnes 188', 
+            'Contaduria'); 
 
- create trigger tr_empleados_borrar
-  on empleados
-  for delete
- as
-  if (select count(*) from deleted)>1
-  begin
-    raiserror('No puede eliminar más de un 1 empleado', 16, 1)
-    rollback transaction
-  end;
+INSERT INTO empleados 
+VALUES     ('24444444', 
+            'Carlos Caseres', 
+            'Caseros 364', 
+            'Sistemas'); 
 
-  GO;
+INSERT INTO empleados 
+VALUES     ('25555555', 
+            'Diana Duarte', 
+            'Colon 1234', 
+            'Sistemas'); 
 
- create trigger tr_empleados_validacion
-  on empleados
-  for delete
- as
-  if (len(old.nombre))<0
-  begin
-    raiserror('No puede eliminar más de un 1 empleado', 16, 1)
-    rollback transaction
-  end;
+INSERT INTO empleados 
+VALUES     ('26666666', 
+            'Diana Duarte', 
+            'Colon 897', 
+            'Sistemas'); 
 
- GO;
+INSERT INTO empleados 
+VALUES     ('27777777', 
+            'Matilda Morales', 
+            'Colon 542', 
+            'Gerencia'); 
 
+go 
 
- create trigger tr_empleados_actualizar
-  on empleados
-  for update
- as
-  if update(documento)
-  begin
-    raiserror('No puede modificar el documento de los empleados', 16, 1)
-    rollback transaction
-  end;
+; 
+CREATE TRIGGER tr_empleados_borrar 
+ON empleados 
+FOR DELETE 
+AS 
+    IF (SELECT Count(*) 
+        FROM   deleted) > 1 
+      BEGIN 
+          RAISERROR('No puede eliminar más de un 1 empleado',16,1) 
 
- GO;
+          ROLLBACK TRANSACTION 
+      END; 
 
+go 
 
- create trigger tr_empleados_insertar
-  on empleados
-  for insert
- as
-  if (select seccion from inserted)='Gerencia'
-  begin
-    raiserror('No puede ingresar empleados en la sección "Gerencia".', 16, 1)
-    rollback transaction
-  end;
+; 
+CREATE TRIGGER tr_empleados_validacion 
+ON empleados 
+FOR DELETE 
+AS 
+    IF ( Len(old.nombre) ) < 0 
+      BEGIN 
+          RAISERROR('No puede eliminar más de un 1 empleado',16,1) 
 
- delete from empleados where domicilio like 'Bulnes%';
+          ROLLBACK TRANSACTION 
+      END; 
 
-  alter table empleados
-  disable trigger tr_empleados_borrar;
+go 
 
- delete from empleados where domicilio like 'Bulnes%';
+; 
+CREATE TRIGGER tr_empleados_actualizar 
+ON empleados 
+FOR UPDATE 
+AS 
+    IF UPDATE(documento) 
+      BEGIN 
+          RAISERROR('No puede modificar el documento de los empleados',16,1) 
 
- select *from empleados;
+          ROLLBACK TRANSACTION 
+      END; 
 
- update empleados set documento='23030303' where documento='23333333';
+go 
 
- insert into empleados values('28888888','Juan Juarez','Jamaica 123','Gerencia');
+; 
+CREATE TRIGGER tr_empleados_insertar 
+ON empleados 
+FOR INSERT 
+AS 
+    IF (SELECT seccion 
+        FROM   inserted) = 'Gerencia' 
+      BEGIN 
+          RAISERROR('No puede ingresar empleados en la sección "Gerencia".',16, 
+                    1) 
 
- alter table empleados
-  disable trigger tr_empleados_actualizar, tr_empleados_insertar;
+          ROLLBACK TRANSACTION 
+      END; 
 
- update empleados set documento='20000444' where documento='24444444';
+    DELETE FROM empleados 
+    WHERE  domicilio LIKE 'Bulnes%'; 
 
- select *from empleados;
+    ALTER TABLE empleados 
+      disable TRIGGER tr_empleados_borrar; 
 
- insert into empleados values('28888888','Juan Juarez','Jamaica 123','Gerencia');
+    DELETE FROM empleados 
+    WHERE  domicilio LIKE 'Bulnes%'; 
 
- select *from empleados;
+    SELECT * 
+    FROM   empleados; 
 
- alter table empleados
-  enable trigger all;
+    UPDATE empleados 
+    SET    documento = '23030303' 
+    WHERE  documento = '23333333'; 
 
- update empleados set documento='30000000' where documento='28888888';
+    INSERT INTO empleados 
+    VALUES     ('28888888', 
+                'Juan Juarez', 
+                'Jamaica 123', 
+                'Gerencia'); 
+
+    ALTER TABLE empleados 
+      disable TRIGGER tr_empleados_actualizar, tr_empleados_insertar; 
+
+    UPDATE empleados 
+    SET    documento = '20000444' 
+    WHERE  documento = '24444444'; 
+
+    SELECT * 
+    FROM   empleados; 
+
+    INSERT INTO empleados 
+    VALUES     ('28888888', 
+                'Juan Juarez', 
+                'Jamaica 123', 
+                'Gerencia'); 
+
+    SELECT * 
+    FROM   empleados; 
+
+    ALTER TABLE empleados 
+      enable TRIGGER ALL; 
+
+    UPDATE empleados 
+    SET    documento = '30000000' 
+    WHERE  documento = '28888888'; 

@@ -1,0 +1,256 @@
+﻿
+
+DROP TABLE IF EXISTS profesor;
+CREATE TABLE profesor (
+  id_profesor serial NOT NULL,
+  apellido_profesor varchar(50) DEFAULT NULL,
+  nombre_profesor varchar(50) DEFAULT NULL,
+  PRIMARY KEY (id_profesor)
+);
+
+DROP TABLE IF EXISTS tema;
+CREATE TABLE tema (
+  id_tema serial NOT NULL,
+  tema varchar(50) DEFAULT NULL,
+  PRIMARY KEY (id_tema)
+);
+
+DROP TABLE IF EXISTS curso;
+CREATE TABLE curso (
+  id_curso serial NOT NULL,
+  id_profesor int DEFAULT NULL,
+  materia varchar(50) DEFAULT NULL,
+  ano int DEFAULT NULL,
+  division varchar(1) DEFAULT NULL,
+  carrera varchar(10) DEFAULT NULL,
+  horas_semanales int DEFAULT NULL,
+  PRIMARY KEY (id_curso),
+  CONSTRAINT FK_curso_profesor FOREIGN KEY (id_profesor) REFERENCES profesor (id_profesor)
+);
+
+DROP TABLE IF EXISTS practicas;
+CREATE TABLE practicas (
+  id_practica serial NOT NULL,
+  id_tema int DEFAULT NULL,
+  descripcion text,
+  nombre varchar(50) DEFAULT NULL,
+  PRIMARY KEY (id_practica),
+  CONSTRAINT FK_practicas_tema FOREIGN KEY (id_tema) REFERENCES tema (id_tema)
+);
+
+DROP TABLE IF EXISTS curso_practica;
+CREATE TABLE curso_practica (
+  id_curso int NOT NULL,
+  id_practica int NOT NULL,
+  horas int DEFAULT NULL,
+  fecha timestamp without time zone NOT NULL,
+  ayudante int DEFAULT NULL,
+  grupos int DEFAULT NULL,
+  caracter varchar(50) DEFAULT NULL,
+  PRIMARY KEY (id_curso,id_practica,fecha),
+  CONSTRAINT FK_cursopractica_practicas FOREIGN KEY (id_practica) REFERENCES practicas (id_practica),
+  CONSTRAINT FK_cursopractica_curso FOREIGN KEY (id_curso) REFERENCES curso (id_curso)
+);
+
+
+/***************************************/
+INSERT INTO profesor (id_profesor,apellido_profesor,nombre_profesor) VALUES 
+ (1,'Naddeo','Juan Manuel'),
+ (2,'Denami','Diego'),
+ (3,'Vazquez Gil','Javier'),
+ (4,'Fett','Jango'),
+ (5,'Pasina','Laura'),
+ (6,'Rossi','Fernando');
+ 
+/***************************************/
+INSERT INTO tema (id_tema,tema) VALUES 
+ (1,'Mecánica - Cinemática'),
+ (2,'Mecánica - Dinámica'),
+ (3,'Mecánica - Fluídos'),
+ (4,'Mecánica - Energía'),
+ (5,'Calorimetría'),
+ (6,'Óptica'),
+ (7,'Química Orgánica'),
+ (8,'Química Inorgánica'),
+ (9,'Biología'),
+ (10,'Clase en el laboratorio'),
+ (11,'Electricidad'),
+ (12,'Electricidad y Magnetismo');
+/***************************************/
+INSERT INTO curso (id_curso,id_profesor,materia,Ano,division,carrera,horas_semanales) VALUES 
+ (1,1,'Físico-Química',5,'A','Com Social',5),
+ (2,1,'Físico-Química',5,'B','Com Social',5),
+ (3,1,'Físico-Química',5,'A','Info',5),
+ (4,1,'Físico-Química',5,'B','Info',5),
+ (5,4,'Físico-Química',4,'A','Com Social',5),
+ (6,1,'Físico-Química',4,'B','Com Social',5),
+ (7,2,'Físico-Química',3,'A','Com Social',3),
+ (8,2,'Físico-Química',3,'B','Com Social',3),
+ (9,2,'Físico-Química',3,'A','Info',3),
+ (10,2,'Físico-Química',3,'B','Info',3),
+ (11,2,'Física',3,'A','Tecnica',4),
+ (12,2,'Física',3,'B','Técnica',4),
+ (13,2,'Física',3,'C','Técnica',4),
+ (14,3,'Química',3,'A','Técnica',3),
+ (15,3,'Química',3,'B','Técnica',3),
+ (16,3,'Química',3,'C','Técnica',3),
+ (17,3,'Física',2,'A','Técnica',4),
+ (18,3,'Física',2,'B','Técnica',4),
+ (19,3,'Física',2,'C','Técnica',4),
+ (20,1,'Físico-Química',4,'A','Info',5),
+ (21,1,'Físico-Química',4,'B','Info',5),
+ (22,5,'Biología',5,'A','Com Social',3),
+ (23,5,'Biología',5,'B','Com Social',3),
+ (24,5,'Biología',5,'A','Info',3),
+ (25,5,'Biología',5,'B','Info',3),
+ (26,5,'Biología',4,'A','Com Social',3),
+ (27,5,'Biología',4,'B','Com Social',3),
+ (28,5,'Biología',4,'A','Info',3),
+ (29,5,'Biología',4,'B','Info',3),
+ (30,5,'Biología',3,'A','Com Social',3),
+ (31,5,'Biología',3,'B','Com Social',3),
+ (32,6,'Biología',3,'A','Info',3),
+ (33,6,'Biología',3,'B','Info',3),
+ (37,6,'Biología',2,'A','Com Social',3),
+ (38,6,'Biología',2,'B','Com Social',3),
+ (39,6,'Biología',2,'A','Info',3),
+ (40,6,'Biología',2,'B','Info',3),
+ (41,6,'Biología',2,'A','Técnica',3),
+ (42,6,'Biología',2,'B','Técnica',3),
+ (43,6,'Biología',2,'C','Técnica',3),
+ (44,6,'Biología',1,'A','Com Social',3),
+ (45,6,'Biología',1,'B','Com Social',3),
+ (46,6,'Biología',1,'A','Info',3),
+ (47,6,'Biología',1,'B','Info',3),
+ (48,6,'Biología',1,'A','Técnica',2),
+ (49,6,'Biología',1,'B','Técnica',2),
+ (50,6,'Biología',1,'C','Técnica',2);
+/***************************************/
+
+INSERT INTO practicas (id_practica,id_tema,descripcion,nombre) VALUES 
+ (1,2,'Determinar el peso de un objeto utilizando resortes, pesas y materiales de medida','Ley de Hooke - Peso de un objeto'),
+ (2,12,'Práctico constituido por 3 partes. Electróforo, motor monopolar, e inducción electromagnética con bobina e imanes.','Inducción electromagnética y electroestática'),
+ (3,2,'Determinación del coeficiente de rozamiento estático y dinámico entre taco de madera y superficie lisa.','Determinación del coeficiente de rozamiento'),
+ (4,1,'Proyección de simulación y ejercicio interactivo','Tiro Oblicuo con simulador'),
+ (6,7,'Comportamiento de sustancias orgánicas usuales. Sacarosa, benzeno, naftaleno. Solubilidad','Sistemas Materiales Orgánicos'),
+ (7,2,'Exposición de los grupos ganadores de la expopío al resto del curso','Poleas y Energías no convencionales'),
+ (8,6,'Armado de un banco óptico. Ley de Descartes de las lentes. Demostraciones de reflexión y refracción con un laser y agua.','Fenómenos ópticos kitasato + banco óptico'),
+ (9,8,'Formación de compuestos y utilización de indicadores para determinar su naturaleza. Óxidos de azufre y magnesio. Bases asociadas. Ácidos nítrico y clorhídrico + metales. Fenoftaleína y Heliantina','Óxidos, ácidos, bases, sales, e indicadores'),
+ (10,1,'Demostración de la caída de objetos en el vacío','Tubo de Newton y Bomba de vacío'),
+ (11,7,'Experiencia para la expopío. Formación del ester de banana','Formación de Esteres'),
+ (12,3,'Experimento cnn el vaso lleno de agua, y una tapa de papel que aguanta el agua por efecto de la presión atmosférica.','Presión Atmosférica'),
+ (13,3,'Dos latas, se sopla en el medio y se observan los efectos. Secador de pelo con pelota de ping pong.','Bernoully Cualitativo'),
+ (14,1,'Usando un dispositivo que dispara al mismo tiempo un móvil horizontalmente, y otro en caída libre, se puede comprobar que ambos tocan simultaneamente el suelo','Tiro Oblicuo - Independencia de movimientos'),
+ (15,6,'Caja de rayos, disco de hartl con prismas, pecera con agua para refractar la luz, espejos cilíndricos, lasers, y lentes.','Óptica Geométrica'),
+ (16,9,'identificación de CH y glúcidos. Utilización de reactivo de Fehling y Lugol.','Carbohidratos y glúcidos'),
+ (17,3,'Pesas, vaso de precipitado, dinámometro, y la comprobación del peso equivalente y el empuje.','Hidroestática - Arquímedes'),
+ (18,6,'Espejos planos y soportes para comprobar la ley reflejando la imagen de alfileres clavados en telgopor','Ley de reflexión en espejos planos'),
+ (19,5,'Pasar vapor de agua por adentro de unas varillas de aluminio, las cuales al dilatarse hacen deflectar un determinado ángulo medible a un clavo sobre el que se apoyan.','Dilatación lineal'),
+ (20,5,'Calcular la constante del calorímetro','Calorímetro de las mezclas'),
+ (21,4,'Botella agujereada y comparación de las velocidades del agua con las alturas de los agujeros','Energía mecánica mediante fluidos'),
+ (22,3,'Ejercicios en clase.','Ejercicios en papel'),
+ (24,1,'Encuentro entre una burbuja y una bolita de vidrio en un tubo con fluido espeso.','Tubo MRU'),
+ (25,9,'Estudio del sistema circulatorio a través del análisis de un corazón de vaca.','Sistema circulatorio'),
+ (26,8,'Utilizando diferentes solventes, como alcohol etílico o agua, se separan diferentes tinturas sobre un papel de filtro para ver como mediante el arrastre de la pintura sobre el papel se pueden separar diferentes componentes(colores) de la tintura analizada.','Cromatología'),
+ (27,8,'Separación de sistemas homogeneos mediante el proceso de destilación simple, y utilizando una columna de destilación.','Destilación'),
+ (29,8,'Demostración de dos experiencias. La reacción aluminio + yodo, utilizando una gota de agua a modo de catalizador y la fuente de amoniaco, que consiste en llenar un erlenmeyer de este gas, y aprovechando la baja presión en el frasco, hacer subir agua con fenolftaleina por un tubito de vidrio. Al entrar al frasco la reacción genera un medio básico que pinta la fenolftaleína del agua la cual entra rápidamente por la dif de presión','Reacciones Químicas - Introducción'),
+ (30,5,'Utilizando un dilatómetro de aguja y un bimetal, se le muestra rápidamente y a modo cualitativo la forma en la que los sólidos se dilatan al aumentar su temperatura, y los efectos directos que esto puede tener.','Dilatación lineal + bimetal demo'),
+ (31,1,'Utilizando una rampa de madera se deben medir los tiempos de caída por la misma de dos bolitas de masas y materiales diferentes. Se debe hacer un tratamiento de las mediciones y de los errores, y confeccionar un informe','Caída de los cuerpos - rampa'),
+ (32,10,'La idea es analizar un caso práctico, con una vela, una lata y agua, y plantear hipótesis acerca del comportamiento del agua, del fuego, y otros.','Método científico - hipótesis'),
+ (33,8,'Clasificación de sistemas, fases, soluciones, y métodos de separación sobre estos sistemas(secado, filtrado, decantación, separación magnética)','Sistemas Materiales'),
+ (34,8,'Reacción con ioduro de potasio y agua oxigenada de 100 vol, la cual se deshace rápidamente del oxígeno llenando de burbujas el detergente. Además, la clásica explosión con la cocola y las mentos.','Pasta de dientes de elefante'),
+ (35,10,'Demostración de los elementos del laboratorio, y realización de un trabajo práctico donde se debe resolver una situación hipotética con dichos elementos.','Elementos de laboratorio');
+
+/***************************************/
+INSERT INTO curso_practica (id_curso,id_practica,horas,fecha,ayudante,grupos,caracter) VALUES 
+ (1,2,2,'2011-11-10 00:00:00',1,0,'Demostrativa'),
+ (1,8,2,'2011-11-04 00:00:00',1,0,'Demostrativa'),
+ (1,8,2,'2011-11-09 00:00:00',1,0,'Demostrativa'),
+ (1,11,2,'2011-10-12 00:00:00',1,0,'Demostrativa'),
+ (1,12,2,'2011-08-12 00:00:00',0,0,'Demostrativa'),
+ (1,13,1,'2011-09-14 00:00:00',1,0,'Demostrativa'),
+ (1,17,2,'2011-09-02 00:00:00',1,1,'Participativa'),
+ (1,17,2,'2011-09-09 00:00:00',1,0,'Demostrativa'),
+ (1,29,2,'2012-04-28 00:00:00',1,0,'Demostrativa'),
+ (2,2,2,'2011-11-10 00:00:00',1,0,'Demostrativa'),
+ (2,11,2,'2011-09-29 00:00:00',1,0,'Demostrativa'),
+ (2,11,2,'2011-10-14 00:00:00',1,0,'Demostrativa'),
+ (2,12,2,'2011-08-30 00:00:00',0,0,'Demostrativa'),
+ (2,13,2,'2011-09-15 00:00:00',1,0,'Demostrativa'),
+ (2,21,1,'2011-11-03 00:00:00',1,0,'Demostrativa'),
+ (2,22,2,'2011-09-13 00:00:00',0,0,'Demostrativa'),
+ (2,29,2,'2012-04-28 00:00:00',1,0,'Demostrativa'),
+ (3,2,2,'2011-11-11 00:00:00',1,0,'Demostrativa'),
+ (3,8,2,'2011-11-09 00:00:00',1,0,'Demostrativa'),
+ (3,11,2,'2011-10-13 00:00:00',1,0,'Demostrativa'),
+ (3,12,2,'2011-08-10 00:00:00',1,0,'Demostrativa'),
+ (3,17,1,'2011-09-02 00:00:00',1,1,'Participativa'),
+ (3,17,1,'2011-09-07 00:00:00',1,1,'Participativa'),
+ (3,17,2,'2011-09-09 00:00:00',1,0,'Demostrativa'),
+ (3,29,2,'2012-04-28 00:00:00',1,0,'Demostrativa'),
+ (4,2,2,'2011-11-09 00:00:00',1,0,'Demostrativa'),
+ (4,8,2,'2011-11-08 00:00:00',0,0,'Demostrativa'),
+ (4,11,2,'2011-10-12 00:00:00',1,0,'Demostrativa'),
+ (4,12,2,'2011-08-10 00:00:00',1,0,'Demostrativa'),
+ (4,13,1,'2011-09-14 00:00:00',1,0,'Demostrativa'),
+ (4,13,1,'2011-09-15 00:00:00',1,0,'Demostrativa'),
+ (4,17,2,'2011-09-07 00:00:00',1,0,'Demostrativa'),
+ (4,22,1,'2011-09-14 00:00:00',0,0,'Demostrativa'),
+ (4,29,2,'2012-04-28 00:00:00',1,0,'Demostrativa'),
+ (5,3,1,'2011-09-30 00:00:00',1,1,'Participativa'),
+ (5,3,1,'2011-10-05 00:00:00',1,1,'Participativa'),
+ (5,3,1,'2011-10-19 00:00:00',1,2,'Participativa'),
+ (5,3,2,'2011-11-04 00:00:00',1,4,'Participativa'),
+ (5,4,2,'2011-09-30 00:00:00',1,0,'Demostrativa'),
+ (6,1,2,'2011-10-14 00:00:00',1,7,'Participativa'),
+ (6,4,2,'2011-09-30 00:00:00',1,0,'Demostrativa'),
+ (6,10,2,'2011-08-11 00:00:00',0,0,'Demostrativa'),
+ (6,10,2,'2011-08-12 00:00:00',1,0,'Demostrativa'),
+ (6,14,2,'2011-09-28 00:00:00',0,4,'Participativa'),
+ (6,31,2,'2012-04-28 00:00:00',0,8,'Participativa'),
+ (7,19,2,'2011-07-14 00:00:00',0,6,'Demostrativa'),
+ (8,19,2,'2011-07-14 00:00:00',0,6,'Participativa'),
+ (9,19,2,'2011-07-06 00:00:00',0,6,'Participativa'),
+ (10,19,2,'2011-07-15 00:00:00',1,6,'Participativa'),
+ (11,15,2,'2011-09-20 00:00:00',0,0,'Demostrativa'),
+ (11,18,2,'2011-09-02 00:00:00',1,4,'Participativa'),
+ (11,20,2,'2011-07-12 00:00:00',0,4,'Participativa'),
+ (12,15,2,'2011-09-20 00:00:00',0,0,'Demostrativa'),
+ (12,18,2,'2011-09-01 00:00:00',0,4,'Participativa'),
+ (12,20,2,'2011-07-05 00:00:00',0,4,'Participativa'),
+ (13,15,2,'2011-09-20 00:00:00',0,0,'Demostrativa'),
+ (13,18,2,'2011-09-01 00:00:00',0,4,'Participativa'),
+ (13,20,2,'2011-07-05 00:00:00',0,4,'Participativa'),
+ (14,6,2,'2011-11-23 00:00:00',1,6,'Participativa'),
+ (14,9,2,'2011-08-24 00:00:00',1,6,'Participativa'),
+ (14,26,1,'2012-05-23 00:00:00',1,0,'Demostrativa'),
+ (15,6,2,'2011-11-23 00:00:00',1,6,'Participativa'),
+ (15,9,2,'2011-08-24 00:00:00',1,6,'Participativa'),
+ (15,26,1,'2012-05-24 00:00:00',1,0,'Demostrativa'),
+ (16,6,2,'2011-11-23 00:00:00',1,6,'Participativa'),
+ (16,9,2,'2011-08-24 00:00:00',1,6,'Participativa'),
+ (16,26,1,'2012-05-29 00:00:00',1,0,'Demostrativa'),
+ (17,7,2,'2011-12-01 00:00:00',1,0,'Demostrativa'),
+ (17,10,1,'2011-08-18 00:00:00',1,0,'Demostrativa'),
+ (18,7,2,'2011-12-01 00:00:00',1,0,'Demostrativa'),
+ (18,10,1,'2011-08-18 00:00:00',1,0,'Demostrativa'),
+ (19,7,2,'2011-12-01 00:00:00',1,0,'Demostrativa'),
+ (19,10,1,'2011-08-18 00:00:00',1,0,'Demostrativa'),
+ (20,10,2,'2011-08-25 00:00:00',0,0,'Demostrativa'),
+ (20,14,2,'2011-09-26 00:00:00',0,4,'Participativa'),
+ (20,24,2,'2011-09-29 00:00:00',0,1,'Participativa'),
+ (20,31,2,'2012-04-28 00:00:00',1,8,'Participativa'),
+ (21,10,2,'2011-08-29 00:00:00',0,0,'Demostrativa'),
+ (21,10,2,'2011-08-30 00:00:00',1,0,'Demostrativa'),
+ (21,14,2,'2011-09-26 00:00:00',0,4,'Participativa'),
+ (21,31,2,'2012-04-28 00:00:00',0,8,'Participativa'),
+ (30,16,2,'2011-10-03 00:00:00',0,7,'Participativa'),
+ (30,16,1,'2011-10-04 00:00:00',0,7,'Participativa'),
+ (30,25,2,'2011-11-21 00:00:00',0,6,'Participativa'),
+ (31,16,2,'2011-10-07 00:00:00',1,7,'Participativa'),
+ (31,16,1,'2011-10-08 00:00:00',1,7,'Participativa'),
+ (31,25,2,'2011-11-25 00:00:00',1,6,'Participativa');
+
+/***************************************/
+
+
